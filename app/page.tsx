@@ -14,7 +14,7 @@ export default function Home() {
   const [expedientes, setExpedientes] = useState<Expediente[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filtro, setFiltro] = useState<Estado | "todos">("activo");
+  const [filtro, setFiltro] = useState<Estado | "todos">("todos");
   const [busqueda, setBusqueda] = useState("");
   const [creando, setCreando] = useState(false);
 
@@ -95,7 +95,7 @@ export default function Home() {
             </h2>
             <p className="text-sm text-gray-500 mt-1">
               {filtrados.length} {filtrados.length === 1 ? "expediente" : "expedientes"}
-              {filtro !== "todos" ? ` ${filtro}s` : ""}
+              {filtro !== "todos" ? ` ${filtro}s` : " en agenda"}
             </p>
           </div>
           <button
@@ -116,19 +116,25 @@ export default function Home() {
             className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white"
           />
           <div className="flex gap-1 bg-white border border-gray-200 rounded-lg p-1">
-            {(["activo", "pausado", "cerrado", "todos"] as const).map((f) => (
-              <button
-                key={f}
-                onClick={() => setFiltro(f)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-md capitalize ${
-                  filtro === f
-                    ? "bg-indigo-600 text-white"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                {f}
-              </button>
-            ))}
+            {(["todos", "activo", "pausado", "cerrado"] as const).map((f) => {
+              const count =
+                f === "todos"
+                  ? expedientes.length
+                  : expedientes.filter((e) => e.estado === f).length;
+              return (
+                <button
+                  key={f}
+                  onClick={() => setFiltro(f)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md capitalize ${
+                    filtro === f
+                      ? "bg-indigo-600 text-white"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  {f} <span className="tabular-nums opacity-70">{count}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 

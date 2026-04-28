@@ -19,11 +19,14 @@ export default function CardExpediente({ exp }: { exp: Expediente }) {
   const badge = urgenciaBadgeFecha(dias);
   const titulo = exp.nombre_corto || exp.cliente;
   const semaforo: Urgencia[] = ["rojo", "amarillo", "verde", "gris"];
+  const noActivo = exp.estado !== "activo";
 
   return (
     <Link
       href={`/expediente/${exp.id}`}
-      className="flex items-center gap-3 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-card px-3 py-2.5"
+      className={`flex items-center gap-3 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-card px-3 py-2.5 ${
+        noActivo ? "opacity-60" : ""
+      }`}
     >
       <span
         className="text-xs font-medium px-2 py-0.5 rounded text-center tabular-nums flex-shrink-0"
@@ -38,6 +41,11 @@ export default function CardExpediente({ exp }: { exp: Expediente }) {
 
       <h3 className="flex-1 min-w-0 text-sm font-medium text-gray-900 truncate">
         {titulo}
+        {noActivo && (
+          <span className="ml-2 text-xs font-normal text-gray-500 capitalize">
+            · {exp.estado}
+          </span>
+        )}
       </h3>
 
       <div className="flex items-center gap-2 flex-shrink-0">
