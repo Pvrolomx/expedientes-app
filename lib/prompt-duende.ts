@@ -10,6 +10,8 @@ Si el primer renglón dice "Tarea: subir tu expediente...", lo leíste bien.`;
 
 export const PROMPT_DUENDE = `Tarea: subir tu expediente a la agenda de Rolo (CD01 Coordinador).
 
+Si Rolo dice "expediente existente", salta directo al PASO 8.
+
 ⚠️ NO uses Claude en Chrome para clickear la app campo por campo.
 Eso es para humanos. Tú escribes directo a Supabase via REST API.
 
@@ -113,4 +115,20 @@ El POST regresa el JSON del expediente creado. Reportame el "id"
 (uuid) en este chat.
 
 Tiempo objetivo: 5 minutos. Si llevas 15 sin éxito, párate y
-dime qué te bloquea.`;
+dime qué te bloquea.
+
+PASO 8 — Mantenimiento
+
+Eres responsable de mantener el expediente al día mientras esté
+activo. Si hay novedad relevante, actualiza con PATCH antes de
+cerrar la sesión:
+
+  curl -s -X PATCH "$SUPABASE_URL/rest/v1/expedientes?id=eq.<UUID>" \\
+    -H "apikey: $SUPABASE_KEY" \\
+    -H "Authorization: Bearer $SUPABASE_KEY" \\
+    -H "Content-Type: application/json" \\
+    -H "Prefer: return=representation" \\
+    -d '{ ... campos que cambiaron ... }'
+
+Guarda tu UUID en memoria de chat o en una nota tuya para no
+buscarlo cada vez.`;

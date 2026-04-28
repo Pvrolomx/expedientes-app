@@ -125,7 +125,7 @@ function OnboardingContent() {
       />
 
       <BloqueCopiable
-        titulo="2. Prompt completo · v5"
+        titulo="2. Prompt completo · v6"
         descripcion="Lo que el duende recibe vía curl. Pegárselo directo si prefieres saltarte el paso del curl."
         contenido={PROMPT_DUENDE}
         altura="500px"
