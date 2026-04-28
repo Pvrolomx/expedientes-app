@@ -56,6 +56,7 @@ export default function DetalleExpediente() {
       .from("expedientes")
       .update({
         cliente: exp.cliente,
+        nombre_corto: exp.nombre_corto,
         asunto: exp.asunto,
         descripcion: exp.descripcion,
         abogado_notaria: exp.abogado_notaria,
@@ -178,17 +179,24 @@ export default function DetalleExpediente() {
           <div className="flex-1 min-w-0">
             <input
               type="text"
+              value={exp.nombre_corto || ""}
+              onChange={(e) => update("nombre_corto", e.target.value)}
+              placeholder="Nombre corto del expediente (ej: Terry Lo de Marcos)"
+              className="w-full text-2xl font-semibold text-gray-900 bg-transparent border-0 px-0 py-1"
+            />
+            <input
+              type="text"
               value={exp.cliente}
               onChange={(e) => update("cliente", e.target.value)}
-              placeholder="Cliente"
-              className="w-full text-2xl font-semibold text-gray-900 bg-transparent border-0 px-0 py-1"
+              placeholder="Cliente (nombre legal completo)"
+              className="w-full text-sm text-gray-500 bg-transparent border-0 px-0 py-0.5 mt-0.5"
             />
             <input
               type="text"
               value={exp.asunto}
               onChange={(e) => update("asunto", e.target.value)}
               placeholder="Asunto"
-              className="w-full text-sm text-gray-600 bg-transparent border-0 px-0 py-0.5 mt-1"
+              className="w-full text-sm text-gray-700 bg-transparent border-0 px-0 py-0.5 mt-1"
             />
           </div>
           {badge && (

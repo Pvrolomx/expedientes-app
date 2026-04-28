@@ -23,6 +23,7 @@ export type Expediente = {
   created_at: string;
   updated_at: string;
   cliente: string;
+  nombre_corto: string | null;
   asunto: string;
   descripcion: string | null;
   abogado_notaria: string | null;

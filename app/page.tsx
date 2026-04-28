@@ -75,6 +75,7 @@ export default function Home() {
       const q = busqueda.toLowerCase();
       return (
         e.cliente.toLowerCase().includes(q) ||
+        (e.nombre_corto || "").toLowerCase().includes(q) ||
         e.asunto.toLowerCase().includes(q) ||
         (e.descripcion || "").toLowerCase().includes(q) ||
         (e.duende_responsable || "").toLowerCase().includes(q)
@@ -138,7 +139,7 @@ export default function Home() {
         )}
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="space-y-2">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <CardSkeleton key={i} />
             ))}
@@ -160,7 +161,7 @@ export default function Home() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="space-y-2">
             {filtrados.map((exp) => (
               <CardExpediente key={exp.id} exp={exp} />
             ))}

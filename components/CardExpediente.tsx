@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { Expediente, Pendiente, Urgencia } from "@/lib/supabase";
 import { URGENCIA_HEX } from "@/lib/supabase";
-import { diasRestantes, urgenciaBadgeFecha, formatearFecha } from "@/lib/utils";
+import { diasRestantes, urgenciaBadgeFecha } from "@/lib/utils";
 
 function contarPorUrgencia(pendientes: Pendiente[]): Record<Urgencia, number> {
   const c: Record<Urgencia, number> = { rojo: 0, amarillo: 0, verde: 0, gris: 0 };
@@ -17,54 +17,42 @@ export default function CardExpediente({ exp }: { exp: Expediente }) {
   const conteos = contarPorUrgencia(exp.pendientes || []);
   const dias = diasRestantes(exp.fecha_critica);
   const badge = urgenciaBadgeFecha(dias);
-
+  const titulo = exp.nombre_corto || exp.cliente;
   const semaforo: Urgencia[] = ["rojo", "amarillo", "verde", "gris"];
 
   return (
     <Link
       href={`/expediente/${exp.id}`}
-      className="block bg-white rounded-xl shadow-card hover:shadow-card-hover p-5 border border-gray-100 hover:border-gray-200"
+      className="flex items-center gap-3 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-card px-3 py-2.5"
     >
-      <div className="flex items-start justify-between gap-3 mb-2">
-        <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold text-gray-900 truncate">
-            {exp.cliente}
-          </h3>
-          <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{exp.asunto}</p>
-        </div>
-        {badge && (
-          <span
-            className="text-xs font-medium px-2.5 py-1 rounded-md whitespace-nowrap"
-            style={{ color: badge.color, background: badge.bg }}
-          >
-            {badge.label}
-          </span>
-        )}
-      </div>
+      <span
+        className="text-xs font-medium px-2 py-0.5 rounded text-center tabular-nums flex-shrink-0"
+        style={{
+          minWidth: "44px",
+          color: badge?.color || "#9CA3AF",
+          background: badge?.bg || "#F3F4F6",
+        }}
+      >
+        {badge ? badge.label : "—"}
+      </span>
 
-      {exp.fecha_critica && (
-        <div className="text-xs text-gray-400 mb-3">
-          {exp.etiqueta_fecha ? `${exp.etiqueta_fecha} · ` : ""}
-          {formatearFecha(exp.fecha_critica)}
-        </div>
-      )}
+      <h3 className="flex-1 min-w-0 text-sm font-medium text-gray-900 truncate">
+        {titulo}
+      </h3>
 
-      <div className="flex items-center gap-3 mt-3">
+      <div className="flex items-center gap-2 flex-shrink-0">
         {semaforo.map((u) => (
-          <div key={u} className="flex items-center gap-1.5">
+          <span key={u} className="flex items-center gap-1">
             <span
-              className="w-2.5 h-2.5 rounded-full"
+              className="w-2 h-2 rounded-full"
               style={{ background: URGENCIA_HEX[u] }}
               aria-hidden
             />
-            <span className="text-xs text-gray-600 tabular-nums">
+            <span className="text-xs text-gray-600 tabular-nums w-3">
               {conteos[u] || 0}
             </span>
-          </div>
+          </span>
         ))}
-        {exp.duende_responsable && (
-          <span className="ml-auto text-xs text-gray-400">{exp.duende_responsable}</span>
-        )}
       </div>
     </Link>
   );
