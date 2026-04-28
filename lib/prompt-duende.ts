@@ -1,6 +1,13 @@
 // Fuente única del prompt para duendes que suben expedientes a la agenda.
 // Editar aquí, commitear, redeploy → todos los duendes nuevos reciben la última versión.
 
+export const CONSIGNA_INTRO = `Eres CD<num> <nombre>. Expediente nuevo.
+
+Lee la consigna con:
+  curl -s https://expedientes.duendes.app/api/prompt
+
+Si el primer renglón dice "Tarea: subir tu expediente...", lo leíste bien.`;
+
 export const PROMPT_DUENDE = `Tarea: subir tu expediente a la agenda de Rolo (CD01 Coordinador).
 
 ⚠️ NO uses Claude en Chrome para clickear la app campo por campo.

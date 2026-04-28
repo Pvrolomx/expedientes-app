@@ -4,15 +4,65 @@ import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { PROMPT_DUENDE } from "@/lib/prompt-duende";
+import { CONSIGNA_INTRO, PROMPT_DUENDE } from "@/lib/prompt-duende";
 
 const TOKEN_VALIDO = "1434";
+
+function BloqueCopiable({
+  titulo,
+  descripcion,
+  contenido,
+  altura,
+}: {
+  titulo: string;
+  descripcion: string;
+  contenido: string;
+  altura?: string;
+}) {
+  const [copiado, setCopiado] = useState(false);
+
+  const copiar = async () => {
+    try {
+      await navigator.clipboard.writeText(contenido);
+      setCopiado(true);
+      setTimeout(() => setCopiado(false), 2000);
+    } catch {
+      alert("No se pudo copiar. Selecciona y copia manualmente.");
+    }
+  };
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 bg-gray-50">
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-semibold text-gray-700">{titulo}</p>
+          <p className="text-xs text-gray-500 mt-0.5 truncate">{descripcion}</p>
+        </div>
+        <button
+          onClick={copiar}
+          className={`text-xs font-medium px-3 py-1.5 rounded ml-3 flex-shrink-0 ${
+            copiado
+              ? "bg-green-50 text-green-700"
+              : "bg-indigo-600 text-white hover:bg-indigo-700"
+          }`}
+        >
+          {copiado ? "✓ Copiado" : "Copiar"}
+        </button>
+      </div>
+      <pre
+        className="text-xs text-gray-800 p-4 overflow-y-auto whitespace-pre-wrap font-mono leading-relaxed"
+        style={altura ? { maxHeight: altura } : undefined}
+      >
+        {contenido}
+      </pre>
+    </div>
+  );
+}
 
 function OnboardingContent() {
   const searchParams = useSearchParams();
   const [autorizado, setAutorizado] = useState(false);
   const [tokenInput, setTokenInput] = useState("");
-  const [copiado, setCopiado] = useState(false);
 
   useEffect(() => {
     const k = searchParams.get("key");
@@ -27,16 +77,6 @@ function OnboardingContent() {
       window.history.replaceState({}, "", url.toString());
     } else {
       alert("Token incorrecto");
-    }
-  };
-
-  const copiar = async () => {
-    try {
-      await navigator.clipboard.writeText(PROMPT_DUENDE);
-      setCopiado(true);
-      setTimeout(() => setCopiado(false), 2000);
-    } catch {
-      alert("No se pudo copiar. Selecciona y copia manualmente.");
     }
   };
 
@@ -73,38 +113,29 @@ function OnboardingContent() {
           Onboarding del duende
         </h2>
         <p className="text-sm text-gray-600 mt-1">
-          Pega este prompt en el chat del duende que va a subir su expediente.
-          El duende lo ejecuta directo contra Supabase, no por la UI.
+          Dos bloques: la intro corta para pegarle al duende, y el prompt
+          completo por si quieres mandárselo directo.
         </p>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-4">
-        <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 bg-gray-50">
-          <span className="text-xs text-gray-500 font-medium">PROMPT v5</span>
-          <button
-            onClick={copiar}
-            className={`text-xs font-medium px-3 py-1 rounded ${
-              copiado
-                ? "bg-green-50 text-green-700"
-                : "bg-indigo-600 text-white hover:bg-indigo-700"
-            }`}
-          >
-            {copiado ? "✓ Copiado" : "Copiar al portapapeles"}
-          </button>
-        </div>
-        <pre className="text-xs text-gray-800 p-4 overflow-x-auto whitespace-pre-wrap font-mono leading-relaxed">
-          {PROMPT_DUENDE}
-        </pre>
-      </div>
+      <BloqueCopiable
+        titulo="1. Consigna intro · pegar al duende"
+        descripcion="4 líneas. El duende va a curl al endpoint y lee el resto."
+        contenido={CONSIGNA_INTRO}
+      />
+
+      <BloqueCopiable
+        titulo="2. Prompt completo · v5"
+        descripcion="Lo que el duende recibe vía curl. Pegárselo directo si prefieres saltarte el paso del curl."
+        contenido={PROMPT_DUENDE}
+        altura="500px"
+      />
 
       <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-900">
-        <p className="font-medium mb-1">Para duendes que prefieren consumirlo via curl:</p>
+        <p className="font-medium mb-1">Endpoint del prompt para curl:</p>
         <code className="block bg-white border border-blue-200 rounded px-3 py-2 mt-2 text-xs text-gray-800 break-all">
-          curl https://expedientes.duendes.app/api/prompt
+          curl -s https://expedientes.duendes.app/api/prompt
         </code>
-        <p className="mt-2 text-xs text-blue-800">
-          Devuelve el prompt en texto plano, listo para procesar.
-        </p>
       </div>
     </main>
   );
