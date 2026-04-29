@@ -13,6 +13,7 @@ import { uuidv4, diasRestantes, urgenciaBadgeFecha } from "@/lib/utils";
 import PendienteItem from "@/components/PendienteItem";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PinGate from "@/components/PinGate";
 
 export default function DetalleExpediente() {
   const router = useRouter();
@@ -139,7 +140,7 @@ export default function DetalleExpediente() {
 
   if (loading) {
     return (
-      <>
+      <PinGate>
         <Header titulo="Expedientes" />
         <main className="max-w-3xl mx-auto px-4 py-8">
           <div className="skeleton h-8 w-1/2 rounded mb-4" />
@@ -147,13 +148,13 @@ export default function DetalleExpediente() {
           <div className="skeleton h-4 w-2/3 rounded mb-6" />
           <div className="skeleton h-32 w-full rounded-xl" />
         </main>
-      </>
+      </PinGate>
     );
   }
 
   if (!exp) {
     return (
-      <>
+      <PinGate>
         <Header titulo="Expedientes" />
         <main className="max-w-3xl mx-auto px-4 py-8">
           <div className="bg-red-50 border border-red-200 text-red-700 text-sm p-4 rounded-xl">
@@ -163,12 +164,12 @@ export default function DetalleExpediente() {
             ← Volver
           </Link>
         </main>
-      </>
+      </PinGate>
     );
   }
 
   return (
-    <>
+    <PinGate>
       <Header titulo="Expedientes" />
       <main className="max-w-3xl mx-auto px-4 py-6 sm:py-8">
         <Link href="/" className="text-sm text-indigo-600 hover:underline">
@@ -355,7 +356,7 @@ export default function DetalleExpediente() {
         </div>
       </main>
       <Footer />
-    </>
+    </PinGate>
   );
 }
 

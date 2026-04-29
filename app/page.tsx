@@ -8,6 +8,7 @@ import CardExpediente from "@/components/CardExpediente";
 import CardSkeleton from "@/components/CardSkeleton";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PinGate from "@/components/PinGate";
 
 export default function Home() {
   const router = useRouter();
@@ -85,7 +86,7 @@ export default function Home() {
   });
 
   return (
-    <>
+    <PinGate>
       <Header titulo="Expedientes" />
       <main className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
@@ -175,6 +176,6 @@ export default function Home() {
         )}
       </main>
       <Footer />
-    </>
+    </PinGate>
   );
 }
