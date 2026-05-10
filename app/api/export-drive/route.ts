@@ -75,6 +75,16 @@ export async function GET(req: NextRequest) {
       {
         error: "drive_export_failed",
         detail: err?.message || String(err),
+        google_error: err?.response?.data || null,
+        env_check: {
+          has_client_id: !!process.env.GOOGLE_CLIENT_ID,
+          client_id_prefix: process.env.GOOGLE_CLIENT_ID?.substring(0, 12) || null,
+          has_client_secret: !!process.env.GOOGLE_CLIENT_SECRET,
+          client_secret_prefix: process.env.GOOGLE_CLIENT_SECRET?.substring(0, 8) || null,
+          has_refresh_token: !!process.env.GOOGLE_REFRESH_TOKEN,
+          refresh_token_prefix: process.env.GOOGLE_REFRESH_TOKEN?.substring(0, 4) || null,
+          refresh_token_length: process.env.GOOGLE_REFRESH_TOKEN?.length || 0,
+        },
         ...log,
         elapsed_ms: Date.now() - t0,
       },
