@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/export-drive",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
